@@ -142,7 +142,7 @@ def plot_label_clusters(vae, data, labels):
     plt.show()
 
 
-def generate_images(vae_model, image, lat_feature=0, scale=3., N=15): 
+def generate_images(vae_model, image, latent_dim, lat_feature=0, scale=3., N=15): 
     """ image.shape = (batch, width, height, depth) = (1, 28, 28, 1)  """
     """ Encode image """
     z_mean,_,_ = vae_model.encoder.predict(image)
@@ -160,7 +160,7 @@ def generate_images(vae_model, image, lat_feature=0, scale=3., N=15):
     fig, axs = plt.subplots(nrows=1, ncols=16, figsize=(16, 1),
                             subplot_kw={'xticks': [], 'yticks': []})
     for i,ax in enumerate(axs.flat):
-        if i==0: ax.imshow(mnist_digits[101])
+        if i==0: ax.imshow(image[0,:,:,:])
         else: ax.imshow(dec_imgs[i-1,:,:,:])
     plt.tight_layout()
     plt.show()
