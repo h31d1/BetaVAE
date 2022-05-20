@@ -140,3 +140,27 @@ def plot_label_clusters(vae, data, labels):
     plt.xlabel("z[0]")
     plt.ylabel("z[1]")
     plt.show()
+
+
+def generate_images(vae_model, image, lat_feature=0, scale=3., N=15): 
+    """ image.shape = (batch, width, height, depth) = (1, 28, 28, 1)  """
+    """ Encode image """
+    z_mean,_,_ = vae_model.encoder.predict(image)
+    """ Sample given feature """
+    z_sample = z_mean.copy()
+    grid_x = np.linspace(-scale, scale, N)
+    samples = []
+    for n in range(N):
+        z_sample[0,lat_feature] = grid_x[n]
+        samples.append(z_sample)
+    samples = np.asarray(samples).reshape(N,latent_dim)
+    """ Generate new images """
+    dec_imgs = vae_model.decoder.predict(samples)
+    """ Plot images """
+    fig, axs = plt.subplots(nrows=1, ncols=16, figsize=(16, 1),
+                            subplot_kw={'xticks': [], 'yticks': []})
+    for i,ax in enumerate(axs.flat):
+        if i==0: ax.imshow(mnist_digits[101])
+        else: ax.imshow(dec_imgs[i-1,:,:,:])
+    plt.tight_layout()
+    plt.show()
