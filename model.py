@@ -46,7 +46,7 @@ def Decoder(latent_dim, filters, last_convdim):
         x = Conv2DTranspose(filters[i], 3, activation="relu", strides=2, padding="same", name=f'deconv2d_{F-i}')(x)
         y = BatchNormalization(name=f'deconv_norm_{F-i}')(x)
         x = ReLU(name=f'deconv_relu_{F-i}')(y)
-    x = Conv2DTranspose(filters[-1], 3, activation="relu", strides=2, padding="same", name=f'deconv2d_{F-1}')(x)
+    x = Conv2DTranspose(filters[-1], 3, activation="relu", strides=2, padding="same", name=f'deconv2d_{F}')(x)
     decoder_outputs = Conv2DTranspose(1, 3, activation="sigmoid", padding="same", name=f'sigmoid')(x)
     decoder = Model(latent_inputs, decoder_outputs, name="decoder")
     return decoder
