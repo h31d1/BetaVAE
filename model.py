@@ -20,8 +20,8 @@ class Sampling(Layer):
         epsilon = tf.keras.backend.random_normal(shape=(batch, dim))
         return z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
-def Encoder(filters, latent_dim):
-    encoder_inputs = Input(shape=(28, 28, 1), name='encoder_input')
+def Encoder(filters, latent_dim, image_shape=(28, 28, 1)):
+    encoder_inputs = Input(shape=image_shape, name='encoder_input')
     x = encoder_inputs
     for i in range(len(filters)):
         x = Conv2D(filters[i], 3, activation="relu", strides=2, padding="same", name=f'conv_layer_{i+1}')(x)
@@ -36,18 +36,18 @@ def Encoder(filters, latent_dim):
     return encoder
 
 
-def Decoder(latent_dim, filters, last_convdim):
+def Decoder(latent_dim, filters, last_convdims, img_depth):
     F = len(filters)
-    flat_dim = last_convdim * last_convdim * filters[-1]
+    flat_dim = last_convdims[0] * last_convdims[1] * filters[-1]
     latent_inputs = Input(shape=(latent_dim,), name='latent_input')
     x = Dense(flat_dim, activation="relu")(latent_inputs)
-    x = Reshape((last_convdim, last_convdim, -1))(x)
+    x = Reshape((last_convdims[0], last_convdims[1], filters[-1]))(x)
     for i in range(F-1,0,-1):
         x = Conv2DTranspose(filters[i], 3, activation="relu", strides=2, padding="same", name=f'deconv2d_{F-i}')(x)
         y = BatchNormalization(name=f'deconv_norm_{F-i}')(x)
         x = ReLU(name=f'deconv_relu_{F-i}')(y)
     x = Conv2DTranspose(filters[-1], 3, activation="relu", strides=2, padding="same", name=f'deconv2d_{F}')(x)
-    decoder_outputs = Conv2DTranspose(1, 3, activation="sigmoid", padding="same", name=f'sigmoid')(x)
+    decoder_outputs = Conv2DTranspose(img_depth, 3, activation="sigmoid", padding="same", name=f'sigmoid')(x)
     decoder = Model(latent_inputs, decoder_outputs, name="decoder")
     return decoder
          
