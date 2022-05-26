@@ -11,7 +11,7 @@ Heidi, Artjom, Siim
 
  ![architecture](architecture.png)
 
-### **$\beta$VAE** = **Encoder** + **Decoder**
+### **BetaVAE** = **Encoder** + **Decoder**
 
 ### **Encoder**
 1. **Convolutional Block**
@@ -38,9 +38,4 @@ Heidi, Artjom, Siim
 6. **Sigmoid Activation**
 - Return Reconstruction
 
-### **Loss** = **Reconstruction Loss** + **$\beta$** $\cdot$ **KL Divergence**
-
-#### Reconstruction Loss
-$$\Sigma (y-\hat{y})^2 \over N \over B$$
-
-#### KL Divergence
+### **Loss** = **Reconstruction Loss** + beta * **KL Divergence**
