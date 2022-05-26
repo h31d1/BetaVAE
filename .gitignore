@@ -15,7 +15,6 @@ __pycache__/
 *.npy
 *.jpg
 *.jpeg
-*.png
 
 # Distribution / packaging
 .Python
