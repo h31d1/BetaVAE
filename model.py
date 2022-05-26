@@ -157,10 +157,22 @@ def generate_images(vae_model, image, latent_dim, lat_feature=0, scale=3., N=15)
     """ Generate new images """
     dec_imgs = vae_model.decoder.predict(samples)
     """ Plot images """
-    fig, axs = plt.subplots(nrows=1, ncols=16, figsize=(16, 1),
+    fig, axs = plt.subplots(nrows=1, ncols=N+1, figsize=(16, 1),
                             subplot_kw={'xticks': [], 'yticks': []})
     for i,ax in enumerate(axs.flat):
         if i==0: ax.imshow(image[0,:,:,:])
         else: ax.imshow(dec_imgs[i-1,:,:,:])
     plt.tight_layout()
+    plt.show()
+
+
+def show_reconstruction(image,vae_model):
+    img = np.expand_dims(image, 0)
+    z_mean,_,_ = vae_model.encoder.predict(img)
+    prediction = vae_model.decoder.predict(z_mean)
+    plt.imshow(image)
+    plt.suptitle("Initial image")
+    plt.show()
+    plt.imshow(prediction[0,:,:,:])
+    plt.suptitle("Encoded-decoded image")
     plt.show()
