@@ -6,12 +6,14 @@ Heidi, Artjom, Siim
 **Our repository**: https://github.com/h31d1/BetaVAE
 
 
-## Architecture
+## **Architecture**
 `model.py`
 
  ![architecture](architecture.png)
 
-#### Encoder
+### **$\beta$VAE** = **Encoder** + **Decoder**
+
+### **Encoder**
 1. **Convolutional Block**
    1. Convolutional Layer
    2. Batch Normalization Layer
@@ -24,7 +26,7 @@ Heidi, Artjom, Siim
 7. **Sampling Layer** on Mean and LogVar
 - Return Mean, LogVar, Sampling
 
-#### Decoder
+### **Decoder**
 1. **Dense Layer**
 2. **Batch Normalization Layer**
 3. **Reshape** (to last convolutional dimensions)
@@ -35,3 +37,10 @@ Heidi, Artjom, Siim
 5. **Deconvolutional Layer** to output dimensions
 6. **Sigmoid Activation**
 - Return Reconstruction
+
+### **Loss** = **Reconstruction Loss** + **$\beta$** $\cdot$ **KL Divergence**
+
+#### Reconstruction Loss
+$$\Sigma (y-\hat{y})^2 \over N \over B$$
+
+#### KL Divergence
